@@ -199,6 +199,15 @@
             border-radius: 12px;
             margin-bottom: 15px;
         }
+        
+        .qr-code {
+            width: 180px;
+            height: 180px;
+            margin: 15px auto;
+            display: block;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
 
         .chave-pix {
             font-weight: 500;
@@ -260,8 +269,12 @@
                 <p>Realize o pagamento via Pix para concluir a operação no sistema.</p>
                 
                 <div class="pix-box">
-                    <p style="margin: 0; font-size: 13px;">Chave Pix Copia e Cola:</p>
-                    <div class="chave-pix" id="texto-chave-pix">a5052757-5521-4aad-b746-be9b0d610931</div>
+                    <p style="margin: 0; font-size: 13px;">Escaneie o QR Code:</p>
+                    
+                    <img src="Qrcode.jpeg" alt="QR Code para pagamento Pix" class="qr-code">
+                    
+                    <p style="margin: 10px 0 0 0; font-size: 13px;">Ou utilize a Chave Pix Copia e Cola:</p>
+                    <div class="chave-pix" id="texto-chave-pix">6ee65a73-afd1-4a9f-a685-784a6722eaa9</div>
                 </div>
 
                 <button onclick="copiarPix()" id="btn-copiar">Copiar Chave Pix</button>
@@ -354,8 +367,6 @@
         }
 
         function abrirWhatsApp() {
-            // Coloque o seu número de WhatsApp aqui, com o código do país (55) e o DDD.
-            // Exemplo: 5511999999999
             const numeroWhatsApp = "5511958938908"; 
             const mensagem = encodeURIComponent("Olá, acabei de realizar o Pix para a liberação do aparelho. Segue o comprovante:");
             window.open(`https://wa.me/${numeroWhatsApp}?text=${mensagem}`, '_blank');
